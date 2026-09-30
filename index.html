@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARSANA — Menjelajahi Cara Pandang, Memahami Kehidupan</title>
+<style>
+:root{
+  --cream:#F7F1E5; --white:#FFFDF8; --maroon:#7A263A; --maroon2:#5F1D2C;
+  --brown:#4A3028; --gold:#C9A227; --beige:#E8DCC8; --green:#4D6B55;
+  --red:#9A3A3A; --shadow:0 12px 35px rgba(74,48,40,.10);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--brown);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.screen{min-height:100vh;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.container{width:min(1160px,92%);margin:auto}
+h1,h2,h3{line-height:1.15;margin-top:0}
+.muted{color:#78665d}
+.gold{color:var(--gold)}
+/* identity */
+#identityScreen{display:grid;place-items:center;position:relative;overflow:hidden;padding:30px}
+.identity-wrap{width:min(900px,100%);display:grid;grid-template-columns:1fr 1fr;background:var(--white);border:1px solid rgba(201,162,39,.35);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+.identity-art{background:linear-gradient(145deg,#7A263A,#5F1D2C);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:center;position:relative;min-height:560px}
+.identity-art:after{content:"";position:absolute;inset:25px;border:1px solid rgba(255,255,255,.25);border-radius:22px;pointer-events:none}
+.mandala{width:190px;height:190px;border:2px solid rgba(201,162,39,.8);border-radius:50%;margin:0 auto 30px;display:grid;place-items:center;position:relative}
+.mandala:before,.mandala:after{content:"";position:absolute;border:1px solid rgba(255,255,255,.45);inset:18px;border-radius:50%;transform:rotate(45deg)}
+.mandala:after{inset:38px;transform:rotate(-45deg)}
+.lotus{font-size:72px;z-index:1}
+.identity-art h1{font-size:clamp(2.2rem,6vw,4rem);text-align:center;letter-spacing:.08em;margin-bottom:8px}
+.identity-art p{text-align:center;color:#f7eedd}
+.identity-form{padding:48px;display:flex;flex-direction:column;justify-content:center}
+.kicker{font-size:.78rem;font-weight:800;letter-spacing:.16em;color:var(--maroon);text-transform:uppercase}
+.field{margin:16px 0}
+.field label{display:block;font-weight:750;margin-bottom:7px}
+.field input{width:100%;padding:13px 15px;border:1px solid #d7c8b4;border-radius:13px;background:#fff;color:var(--brown);outline:none}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.13)}
+.btn{border:0;border-radius:13px;padding:13px 18px;font-weight:800;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--maroon);color:#fff;box-shadow:0 8px 20px rgba(122,38,58,.18)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-soft{background:var(--beige);color:var(--brown)}
+.btn-outline{background:transparent;color:var(--maroon);border:1px solid rgba(122,38,58,.3)}
+.error{color:var(--red);font-size:.9rem;min-height:22px;margin:4px 0}
+.small-note{font-size:.82rem;color:#85746a;margin-top:15px}
+/* app */
+#app{min-height:100vh}
+.navbar{position:sticky;top:0;z-index:20;background:rgba(255,253,248,.95);backdrop-filter:blur(12px);border-bottom:1px solid #eadfce}
+.nav-inner{width:min(1180px,94%);margin:auto;display:flex;align-items:center;gap:18px;min-height:68px}
+.brand{font-weight:900;color:var(--maroon);letter-spacing:.08em;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand span{color:var(--gold);font-size:1.25rem}
+.nav-links{display:flex;gap:4px;align-items:center;flex:1;justify-content:center}
+.nav-links button{background:none;border:0;color:#6e5a51;font-weight:700;padding:9px 10px;border-radius:10px}
+.nav-links button:hover,.nav-links button.active{background:#f1e6d6;color:var(--maroon)}
+.sound-btn{white-space:nowrap}
+.hamb{display:none}
+main{padding:38px 0 70px}
+.hero{background:var(--white);border:1px solid #eadfce;border-radius:28px;padding:34px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;width:180px;height:180px;border:1px solid #e2c986;border-radius:50%;right:-55px;top:-65px}
+.hero-grid{display:grid;grid-template-columns:1.4fr .6fr;gap:25px;align-items:center}
+.eyebrow{color:var(--maroon);font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}
+.hero h2{font-size:clamp(2rem,4vw,3.2rem);margin:8px 0 10px}
+.hero-visual{display:grid;place-items:center;min-height:180px}
+.hero-lotus{font-size:110px;filter:drop-shadow(0 8px 10px rgba(122,38,58,.12))}
+.profile-line{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
+.chip{background:#f0e5d5;border:1px solid #e2d2bd;border-radius:999px;padding:6px 11px;font-size:.82rem;font-weight:750}
+.progress-box{margin-top:24px;background:#f3eadc;border-radius:17px;padding:14px}
+.progress-head{display:flex;justify-content:space-between;font-weight:850;font-size:.9rem}
+.progress-track{height:12px;background:#ddcfbd;border-radius:99px;overflow:hidden;margin-top:9px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--maroon),var(--gold));border-radius:99px;transition:width .6s ease}
+.section-title{margin:35px 0 15px;display:flex;align-items:end;justify-content:space-between;gap:15px}
+.section-title h2{margin:0}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.menu-card{background:var(--white);border:1px solid #eadfce;border-radius:20px;padding:22px;box-shadow:0 6px 22px rgba(74,48,40,.06);transition:.22s}
+.menu-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.menu-icon{width:48px;height:48px;border-radius:15px;background:#f0e2cf;display:grid;place-items:center;font-size:1.4rem;margin-bottom:14px}
+.menu-card h3{margin-bottom:6px}
+.callout{margin-top:18px;background:#fbf6ec;border-left:4px solid var(--gold);padding:15px 17px;border-radius:12px}
+/* general pages */
+.page-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:22px}
+.page-head h1{margin:4px 0 0;font-size:clamp(1.9rem,4vw,2.7rem)}
+.backtop{color:var(--maroon);font-weight:800}
+.accordion{display:grid;gap:12px}
+.acc{background:var(--white);border:1px solid #eadfce;border-radius:18px;overflow:hidden}
+.acc-head{width:100%;border:0;background:none;padding:19px 20px;display:flex;justify-content:space-between;align-items:center;text-align:left;font-weight:850;color:var(--brown)}
+.acc-body{padding:0 20px 20px;display:none}
+.acc.open .acc-body{display:block}
+.acc.open .acc-head{color:var(--maroon)}
+.points{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.point{background:#f8f1e6;border-radius:12px;padding:11px 13px}
+.complete-row{display:flex;justify-content:flex-end;margin-top:15px}
+.done{background:#e5efe7;color:#355740;border:1px solid #bcd4c3}
+.node-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.node{background:var(--white);border:1px solid #eadfce;border-radius:18px;padding:20px;text-align:left;transition:.2s}
+.node:hover{transform:translateY(-3px);border-color:#d4b45d}
+.node strong{display:block;color:var(--maroon);font-size:1.05rem}
+.node small{display:block;margin-top:5px;color:#806e64}
+.concept-detail{margin-top:18px;background:#f6eddf;border:1px solid #e0cfb6;border-radius:18px;padding:20px;min-height:90px}
+.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:20px}
+.case-card{background:var(--white);border:1px solid #eadfce;border-radius:18px;padding:20px}
+.case-card h3{color:var(--maroon)}
+/* activities */
+.activity-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab-btn{border:1px solid #dbcbb6;background:var(--white);border-radius:999px;padding:9px 14px;font-weight:800;color:var(--brown)}
+.tab-btn.active{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.quiz-box{background:var(--white);border:1px solid #eadfce;border-radius:22px;padding:25px;box-shadow:0 8px 25px rgba(74,48,40,.06)}
+.statement{font-size:1.18rem;font-weight:800;background:#fbf6ec;border-radius:15px;padding:18px;margin:15px 0}
+.feedback{margin:15px 0;padding:15px;border-radius:14px;display:none}
+.feedback.show{display:block}
+.feedback.good{background:#e8f2ea;color:#355740;border:1px solid #bfd7c5}
+.feedback.bad{background:#f8eaea;color:#7d3030;border:1px solid #e2bcbc}
+.choice-row{display:flex;gap:10px;flex-wrap:wrap}
+.choice{border:1px solid #d9c9b4;background:#fff;border-radius:12px;padding:12px 18px;font-weight:800;transition:.15s}
+.choice:hover{transform:scale(1.02);border-color:var(--gold)}
+.choice.selected{background:#f0e2cf;border-color:var(--gold)}
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.match-list{display:grid;gap:9px}
+.match-item{padding:13px 15px;background:#fff;border:1px solid #ded0bd;border-radius:12px;text-align:left;font-weight:750}
+.match-item.selected{border:2px solid var(--gold);background:#fbf5e8}
+.match-item.matched{background:#e8f2ea;border-color:#b8d2be;color:#355740}
+.match-item.wrong{animation:shake .25s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.match-status{margin-top:15px;font-weight:800}
+.quiz-options{display:grid;gap:10px;margin:17px 0}
+.quiz-option{border:1px solid #d9c9b4;background:#fff;border-radius:13px;padding:14px;text-align:left;transition:.18s}
+.quiz-option:hover{border-color:var(--gold);transform:translateX(2px)}
+.quiz-option.selected{border:2px solid var(--maroon);background:#f8eee8}
+.quiz-option.correct{border-color:#4d8a5a;background:#e9f3eb}
+.quiz-option.incorrect{border-color:#b94a4a;background:#f8e9e9}
+.quiz-nav{display:flex;justify-content:flex-end;margin-top:15px}
+.score-card{text-align:center;background:var(--white);border:1px solid #eadfce;border-radius:25px;padding:35px;box-shadow:var(--shadow)}
+.score-ring{width:170px;height:170px;border-radius:50%;margin:10px auto 22px;background:conic-gradient(var(--maroon) var(--score),#e6d9c7 0);display:grid;place-items:center;position:relative}
+.score-ring:after{content:"";position:absolute;inset:12px;background:var(--white);border-radius:50%}
+.score-number{position:relative;z-index:1;font-size:2.2rem;font-weight:950;color:var(--maroon)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+.stat{background:#f6eddf;border-radius:14px;padding:14px}
+.stat strong{display:block;font-size:1.3rem;color:var(--maroon)}
+.review-list{display:grid;gap:12px;margin-top:20px}
+.review{background:var(--white);border:1px solid #eadfce;border-radius:17px;padding:18px}
+.review h3{font-size:1rem;margin-bottom:6px}
+.reflection-grid{display:grid;gap:16px}
+.textarea-wrap{background:var(--white);border:1px solid #eadfce;border-radius:17px;padding:18px}
+textarea{width:100%;min-height:125px;resize:vertical;border:1px solid #d8c9b7;border-radius:12px;padding:13px;background:#fff;outline:none}
+textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.12)}
+.saved{background:#e8f2ea;color:#355740;border-radius:12px;padding:12px 14px;margin-top:14px;display:none}
+.saved.show{display:block}
+.footer{margin-top:40px;text-align:center;color:#8a786d;font-size:.84rem}
+.toast{position:fixed;right:18px;bottom:18px;z-index:50;background:#4A3028;color:#fff;padding:13px 17px;border-radius:13px;box-shadow:var(--shadow);transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}
+.toast.show{transform:none;opacity:1}
+/* responsive */
+@media(max-width:900px){
+  .menu-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .node-grid{grid-template-columns:repeat(2,1fr)}
+  .case-grid{grid-template-columns:1fr}
+}
+@media(max-width:720px){
+  .identity-wrap{grid-template-columns:1fr}
+  .identity-art{min-height:auto;padding:30px}
+  .identity-form{padding:30px}
+  .nav-inner{min-height:62px}
+  .nav-links{display:none;position:absolute;top:62px;left:0;right:0;background:var(--white);padding:10px;box-shadow:0 12px 25px rgba(0,0,0,.08);flex-direction:column;align-items:stretch}
+  .nav-links.open{display:flex}
+  .nav-links button{text-align:left}
+  .hamb{display:block;border:1px solid #dccdb9;background:#fff;border-radius:10px;padding:7px 10px}
+  .brand{margin-right:auto}
+  .sound-btn{padding:9px 10px}
+  .menu-grid,.node-grid,.points,.match-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  main{padding-top:24px}
+}
+@media(max-width:460px){
+  #identityScreen{padding:14px}
+  .identity-art h1{font-size:2.2rem}
+  .mandala{width:145px;height:145px}.lotus{font-size:55px}
+  .identity-form{padding:24px}
+  .hero,.quiz-box,.score-card{padding:20px}
+  .stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<section id="identityScreen" class="screen">
+  <div class="identity-wrap">
+    <div class="identity-art">
+      <div class="mandala"><div class="lotus">🪷</div></div>
+      <div class="kicker" style="color:#e7cf84;text-align:center">Media Pembelajaran Interaktif</div>
+      <h1>DARSANA</h1>
+      <p>Menjelajahi Cara Pandang, Memahami Kehidupan</p>
+    </div>
+    <div class="identity-form">
+      <div class="kicker">Pendidikan Agama Hindu dan Budi Pekerti</div>
+      <h2>Siap memulai perjalanan belajar?</h2>
+      <p class="muted">Masukkan identitasmu terlebih dahulu untuk masuk ke ruang belajar Darsana.</p>
+      <div class="field"><label for="studentName">Nama Lengkap</label><input id="studentName" autocomplete="name" placeholder="Contoh: I Dewa Ayu Kesa Cahyani"></div>
+      <div class="field"><label for="studentClass">Kelas</label><input id="studentClass" placeholder="Contoh: XI.1"></div>
+      <div class="field"><label for="studentAbsent">Nomor Absen</label><input id="studentAbsent" inputmode="numeric" placeholder="Contoh: 08"></div>
+      <div id="identityError" class="error"></div>
+      <button class="btn btn-primary" onclick="startLearning()">MULAI BELAJAR →</button>
+      <div class="small-note">Materi pembelajaran disusun berdasarkan PDF Darsana yang diberikan.</div>
+    </div>
+  </div>
+</section>
+
+<section id="app" class="hidden">
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="brand"><span>🪷</span> DARSANA</div>
+      <button class="hamb" onclick="toggleMenu()">☰</button>
+      <div id="navLinks" class="nav-links">
+        <button data-page="home" onclick="showPage('home')">BERANDA</button>
+        <button data-page="material" onclick="showPage('material')">MATERI</button>
+        <button data-page="activity" onclick="showPage('activity')">AKTIVITAS</button>
+        <button data-page="quiz" onclick="showPage('quiz')">KUIS</button>
+        <button data-page="result" onclick="showPage('result')">HASIL</button>
+        <button data-page="reflection" onclick="showPage('reflection')">REFLEKSI</button>
+      </div>
+      <button id="soundToggle" class="btn btn-soft sound-btn" onclick="toggleSound()">🔇 SOUND OFF</button>
+    </div>
+  </nav>
+
+  <main>
+    <div id="homePage" class="page container"></div>
+    <div id="materialPage" class="page container hidden"></div>
+    <div id="activityPage" class="page container hidden"></div>
+    <div id="quizPage" class="page container hidden"></div>
+    <div id="resultPage" class="page container hidden"></div>
+    <div id="reflectionPage" class="page container hidden"></div>
+  </main>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const material = [
+ {id:'darsana',title:'1. Pengertian Darsana',summary:'Darsana adalah sistem pemikiran atau filsafat yang berusaha memahami kehidupan, pengetahuan, kebenaran, dan tujuan manusia.',
+ body:`Kata Darsana berkaitan dengan makna “melihat” atau “pandangan”. Dalam konteks filsafat Hindu, Darsana dipahami sebagai cara pandang terhadap realitas dan kehidupan. Darsana membantu manusia mengembangkan kemampuan berpikir, memahami pengetahuan, mencari kebenaran, serta mengarahkan kehidupan menuju tujuan yang lebih tinggi.`,
+ points:['Sistem pemikiran atau filsafat','Berkaitan dengan “melihat” atau “pandangan”','Membahas kehidupan, pengetahuan, kebenaran, dan tujuan manusia','Mendorong kemampuan berpikir dan pencarian kebenaran']},
+ {id:'sad',title:'2. Sad Darsana',summary:'Tradisi filsafat Hindu mengenal enam sistem filsafat yang disebut Sad Darsana.',
+ body:`Enam sistem tersebut adalah Nyaya, Vaiseshika, Samkhya, Yoga, Mimamsa, dan Vedanta. Keenamnya memiliki karakteristik dan fokus pemikiran yang berbeda, tetapi sama-sama memberikan kontribusi terhadap perkembangan pemikiran Hindu.`,
+ points:['Nyaya','Vaiseshika','Samkhya','Yoga','Mimamsa','Vedanta']},
+ {id:'nyaya',title:'3. Nyaya',summary:'Berfokus pada logika, penalaran, dan pengetahuan yang benar.',
+ body:`Tokoh yang dikenal dalam tradisi Nyaya adalah Rsi Gautama/Aksapada Gautama. Dalam pembelajaran, Nyaya dapat dikaitkan dengan berpikir logis, menganalisis informasi, membedakan pengetahuan yang benar dan keliru, serta menarik kesimpulan berdasarkan alasan yang tepat. Penerapannya antara lain memeriksa sumber, bukti, dan alasan sebelum mempercayai informasi di media sosial.`,
+ points:['Tokoh: Rsi Gautama/Aksapada Gautama','Fokus: logika, penalaran, pengetahuan yang benar','Keterampilan: berpikir logis dan menganalisis informasi','Penerapan: memeriksa sumber dan bukti informasi']},
+ {id:'vaiseshika',title:'4. Vaiseshika',summary:'Memberikan perhatian terhadap hakikat realitas dan berbagai kategori dalam realitas.',
+ body:`Tokoh yang dikenal adalah Rsi Kanada. Pemikiran Vaiseshika membantu manusia memahami bahwa realitas dapat dikaji dan dikategorikan secara sistematis. Dalam penelitian, kemampuan mengelompokkan dan mengidentifikasi berbagai objek atau fenomena secara sistematis dapat menjadi penerapannya.`,
+ points:['Tokoh: Rsi Kanada','Fokus: hakikat realitas dan kategori dalam realitas','Realitas dapat dikaji secara sistematis','Penerapan: mengelompokkan dan mengidentifikasi objek/fenomena']},
+ {id:'samkhya',title:'5. Samkhya',summary:'Menjelaskan realitas melalui konsep Purusa dan Prakrti.',
+ body:`Purusa dipahami sebagai prinsip kesadaran, sedangkan Prakrti merupakan prinsip materi atau alam. Samkhya mengajarkan pemahaman terhadap perbedaan antara Purusa dan Prakrti sebagai bagian dari jalan menuju pembebasan. Tokoh yang secara tradisional dikaitkan dengan Samkhya adalah Rsi Kapila. Penerapannya mendorong kesadaran bahwa kehidupan tidak hanya berkaitan dengan aspek material, tetapi juga kesadaran.`,
+ points:['Tokoh: Rsi Kapila','Purusa: prinsip kesadaran','Prakrti: prinsip materi atau alam','Perbedaan Purusa dan Prakrti berkaitan dengan jalan menuju pembebasan']},
+ {id:'yoga',title:'6. Yoga',summary:'Menekankan disiplin dan pengendalian diri untuk mencapai keadaan spiritual yang lebih tinggi.',
+ body:`Tokoh utama yang dikenal dalam sistem Yoga adalah Rsi Patanjali. Yoga memiliki hubungan erat dengan pengendalian pikiran, konsentrasi, meditasi, dan disiplin diri. Dalam kehidupan siswa, penerapannya dapat berupa mengatur pikiran, mengendalikan emosi, menjaga konsentrasi, melakukan refleksi, dan membangun kebiasaan hidup yang disiplin.`,
+ points:['Tokoh: Rsi Patanjali','Fokus: disiplin dan pengendalian diri','Berkaitan dengan konsentrasi, meditasi, dan pengendalian pikiran','Penerapan: mengatur pikiran, emosi, konsentrasi, refleksi, disiplin']},
+ {id:'mimamsa',title:'7. Mimamsa',summary:'Memberikan perhatian terhadap Weda, kewajiban, dan pelaksanaan tindakan keagamaan.',
+ body:`Tokoh yang dikenal dalam tradisi Mimamsa adalah Rsi Jaimini. Mimamsa membantu memahami pentingnya pelaksanaan kewajiban berdasarkan prinsip dan ajaran yang menjadi landasannya. Peserta didik dapat menerapkan nilai tanggung jawab dengan melaksanakan kewajiban belajar, menghormati orang tua dan guru, serta menjalankan tugas dengan sungguh-sungguh.`,
+ points:['Tokoh: Rsi Jaimini','Fokus: Weda, kewajiban, tindakan keagamaan','Menekankan pelaksanaan kewajiban berdasarkan prinsip dan ajaran','Penerapan: belajar, menghormati orang tua/guru, menyelesaikan tugas']},
+ {id:'vedanta',title:'8. Vedanta',summary:'Berhubungan erat dengan bagian akhir Weda, khususnya Upanisad.',
+ body:`Vedanta membahas persoalan mengenai realitas tertinggi, Atman, Brahman, dan pembebasan. Tokoh-tokoh penting dalam perkembangan pemikiran Vedanta antara lain Badarayana dan para pemikir Vedanta berikutnya. Penerapannya dapat mendorong refleksi mengenai hakikat diri, hubungan manusia dengan realitas tertinggi, serta tujuan kehidupan.`,
+ points:['Berkaitan erat dengan bagian akhir Weda, khususnya Upanisad','Membahas realitas tertinggi, Atman, Brahman, dan pembebasan','Tokoh penting: Badarayana dan para pemikir Vedanta berikutnya','Penerapan: refleksi tentang diri, realitas tertinggi, dan tujuan hidup']}
+];
+
+const nodes = {
+ nyaya: {title:'Nyaya', text:'Logika, penalaran, dan pengetahuan yang benar. Tokoh yang dikenal: Rsi Gautama/Aksapada Gautama.'},
+ vaiseshika:{title:'Vaiseshika',text:'Hakikat realitas dan berbagai kategori dalam realitas. Tokoh yang dikenal: Rsi Kanada.'},
+ samkhya:{title:'Samkhya',text:'Konsep Purusa sebagai prinsip kesadaran dan Prakrti sebagai prinsip materi atau alam. Tokoh: Rsi Kapila.'},
+ yoga:{title:'Yoga',text:'Disiplin dan pengendalian diri, termasuk konsentrasi, meditasi, dan pengendalian pikiran. Tokoh: Rsi Patanjali.'},
+ mimamsa:{title:'Mimamsa',text:'Weda, kewajiban, dan pelaksanaan tindakan keagamaan. Tokoh: Rsi Jaimini.'},
+ vedanta:{title:'Vedanta',text:'Bagian akhir Weda, khususnya Upanisad; membahas realitas tertinggi, Atman, Brahman, dan pembebasan.'}
+};
+
+const trueFalse = [
+ {q:'Darsana dapat dipahami sebagai suatu cara pandang terhadap realitas dan kehidupan.',a:true,e:'Darsana berkaitan dengan makna “melihat” atau “pandangan” dan dalam filsafat Hindu dipahami sebagai cara pandang terhadap realitas dan kehidupan.'},
+ {q:'Nyaya terutama memberikan perhatian terhadap pengendalian diri dan meditasi.',a:false,e:'Pengendalian diri, konsentrasi, dan meditasi merupakan hal yang erat dengan Yoga. Nyaya berfokus pada logika, penalaran, dan pengetahuan yang benar.'},
+ {q:'Purusa dalam Samkhya dipahami sebagai prinsip materi atau alam.',a:false,e:'Dalam Samkhya, Purusa adalah prinsip kesadaran, sedangkan Prakrti adalah prinsip materi atau alam.'},
+ {q:'Mimamsa memberikan perhatian terhadap Weda, kewajiban, dan pelaksanaan tindakan keagamaan.',a:true,e:'Pernyataan tersebut sesuai dengan ringkasan materi Mimamsa pada LKPD.'},
+ {q:'Vedanta memiliki hubungan erat dengan bagian akhir Weda, khususnya Upanisad.',a:true,e:'LKPD menjelaskan bahwa Vedanta memiliki hubungan erat dengan bagian akhir Weda, khususnya Upanisad.'},
+ {q:'Vaiseshika dapat diterapkan dengan kemampuan mengelompokkan dan mengidentifikasi objek atau fenomena secara sistematis.',a:true,e:'Penerapan yang diberikan dalam LKPD adalah menggunakan kemampuan mengelompokkan dan mengidentifikasi objek atau fenomena secara sistematis.'}
+];
+
+const pairs = [
+ ['Nyaya','Logika, penalaran, dan pengetahuan yang benar'],
+ ['Vaiseshika','Hakikat realitas dan berbagai kategori dalam realitas'],
+ ['Samkhya','Purusa dan Prakrti'],
+ ['Yoga','Disiplin dan pengendalian diri'],
+ ['Mimamsa','Weda, kewajiban, dan tindakan keagamaan'],
+ ['Vedanta','Bagian akhir Weda, khususnya Upanisad']
+];
+
+const quiz = [
+ {q:'Istilah yang digunakan untuk menyebut sistem filsafat dalam tradisi Hindu adalah ...',o:['Darsana','Yajña','Dharma','Samsara'],a:0,e:'LKPD menyebut Darsana sebagai istilah untuk sistem pemikiran atau filsafat dalam konteks filsafat Hindu.'},
+ {q:'Enam sistem filsafat Hindu dikenal dengan istilah ...',o:['Catur Marga','Sad Darsana','Tri Kaya Parisudha','Panca Sradha'],a:1,e:'Enam sistem filsafat Hindu dalam LKPD disebut Sad Darsana.'},
+ {q:'Manakah yang seluruhnya termasuk Sad Darsana?',o:['Nyaya, Yoga, Vedanta','Purana, Itihasa, Upaweda','Ramayana, Mahabharata, Purana','Ayurveda, Dhanurveda, Gandharvaveda'],a:0,e:'Sad Darsana terdiri atas Nyaya, Vaiseshika, Samkhya, Yoga, Mimamsa, dan Vedanta.'},
+ {q:'Sistem Darsana yang memberikan perhatian besar terhadap logika dan penalaran adalah ...',o:['Yoga','Mimamsa','Nyaya','Vedanta'],a:2,e:'Nyaya memberikan perhatian besar terhadap logika, penalaran, dan pengetahuan yang benar.'},
+ {q:'Tokoh yang secara tradisional dikaitkan dengan Samkhya adalah ...',o:['Rsi Jaimini','Rsi Kapila','Rsi Patanjali','Rsi Gautama'],a:1,e:'LKPD mengaitkan Samkhya secara tradisional dengan Rsi Kapila.'},
+ {q:'Konsep yang sangat penting dalam Samkhya adalah ...',o:['Purusa dan Prakrti','Dharma dan Yajña','Sruti dan Smerti','Rta dan Karma'],a:0,e:'Samkhya menjelaskan realitas melalui Purusa sebagai prinsip kesadaran dan Prakrti sebagai prinsip materi atau alam.'},
+ {q:'Sistem filsafat yang erat dengan disiplin dan pengendalian diri adalah ...',o:['Vaiseshika','Nyaya','Yoga','Mimamsa'],a:2,e:'Yoga menekankan disiplin dan pengendalian diri, termasuk pengendalian pikiran, konsentrasi, dan meditasi.'},
+ {q:'Tokoh utama yang dikenal dalam sistem Yoga adalah ...',o:['Rsi Kanada','Rsi Jaimini','Rsi Patanjali','Rsi Kapila'],a:2,e:'LKPD menyebut Rsi Patanjali sebagai tokoh utama yang dikenal dalam sistem Yoga.'},
+ {q:'Mimamsa memberikan perhatian besar terhadap ...',o:['Weda, kewajiban, dan pelaksanaan tindakan keagamaan','Struktur atom modern','Seni pertunjukan','Ilmu pengobatan'],a:0,e:'Fokus Mimamsa dalam LKPD adalah Weda, kewajiban, dan pelaksanaan tindakan keagamaan.'},
+ {q:'Vedanta memiliki hubungan erat dengan ...',o:['Dhanurveda','Upanisad','Jyotisa','Chanda'],a:1,e:'Vedanta memiliki hubungan erat dengan bagian akhir Weda, khususnya Upanisad.'},
+ {q:'Seorang siswa memeriksa sumber, bukti, dan alasan sebelum mempercayai informasi media sosial. Hal ini paling sesuai dengan penerapan ...',o:['Nyaya','Yoga','Mimamsa','Vedanta'],a:0,e:'LKPD memberi contoh penerapan Nyaya berupa pemeriksaan sumber, bukti, dan alasan sebelum mempercayai informasi.'},
+ {q:'Ketika siswa mengelompokkan objek atau fenomena secara sistematis dalam penelitian, konsep yang paling relevan adalah ...',o:['Yoga','Vaiseshika','Mimamsa','Vedanta'],a:1,e:'Penerapan Vaiseshika dalam LKPD berkaitan dengan mengelompokkan dan mengidentifikasi objek atau fenomena secara sistematis.'},
+ {q:'Pernyataan yang tepat mengenai Purusa dan Prakrti adalah ...',o:['Purusa adalah materi, Prakrti adalah kesadaran','Purusa adalah kesadaran, Prakrti adalah materi atau alam','Keduanya adalah tindakan keagamaan','Keduanya adalah bagian akhir Weda'],a:1,e:'Samkhya memahami Purusa sebagai prinsip kesadaran dan Prakrti sebagai prinsip materi atau alam.'},
+ {q:'Seorang siswa belajar mengatur pikiran, mengendalikan emosi, menjaga konsentrasi, dan membangun kebiasaan disiplin. Ini merupakan contoh penerapan ...',o:['Nyaya','Vaiseshika','Yoga','Mimamsa'],a:2,e:'LKPD mencantumkan pengaturan pikiran, pengendalian emosi, konsentrasi, refleksi, dan disiplin sebagai penerapan Yoga.'},
+ {q:'Sikap menghormati orang tua dan guru serta menjalankan tugas dengan sungguh-sungguh dapat dikaitkan dengan ...',o:['Mimamsa','Samkhya','Nyaya','Vaiseshika'],a:0,e:'LKPD memberikan contoh penerapan Mimamsa melalui pelaksanaan kewajiban belajar, menghormati orang tua dan guru, serta menjalankan tugas dengan sungguh-sungguh.'},
+ {q:'Refleksi mengenai hakikat diri, hubungan manusia dengan realitas tertinggi, dan tujuan kehidupan dapat dikaitkan dengan ...',o:['Vedanta','Nyaya','Yoga','Vaiseshika'],a:0,e:'Penerapan Vedanta dalam LKPD mendorong refleksi mengenai hakikat diri, hubungan dengan realitas tertinggi, dan tujuan kehidupan.'},
+ {q:'Seorang siswa menerima informasi digital lalu langsung membagikannya tanpa memeriksa kebenaran. Masalah utama dalam studi kasus LKPD adalah ...',o:['Tidak melakukan pemeriksaan terhadap informasi','Tidak melakukan meditasi','Tidak mengelompokkan objek','Tidak mempelajari Upanisad'],a:0,e:'Studi Kasus 1 meminta siswa melihat masalah informasi yang dibagikan tanpa memeriksa kebenarannya dan mengaitkannya dengan berpikir kritis.'},
+ {q:'Dalam studi kasus siswa yang mudah marah ketika mendapat kritik, pemikiran Darsana yang paling relevan dengan pengendalian diri adalah ...',o:['Yoga','Vaiseshika','Nyaya','Vedanta'],a:0,e:'LKPD mengaitkan Yoga dengan pengendalian pikiran, emosi, konsentrasi, refleksi, dan disiplin diri.'},
+ {q:'Enam sistem Darsana memiliki fokus yang berbeda, tetapi menurut LKPD ...',o:['Tidak memiliki hubungan dengan pemikiran Hindu','Semuanya memiliki fokus yang sama persis','Sama-sama memberikan kontribusi terhadap perkembangan pemikiran Hindu','Hanya satu yang dapat dipelajari'],a:2,e:'LKPD menyatakan bahwa keenam sistem memiliki karakteristik dan fokus berbeda, tetapi sama-sama berkontribusi pada perkembangan pemikiran Hindu.'},
+ {q:'Salah satu tujuan mempelajari Darsana menurut tujuan pembelajaran LKPD adalah ...',o:['Menghafal semua istilah tanpa memahami','Menghubungkan pemikiran Darsana dengan kehidupan sehari-hari','Menghindari penggunaan teknologi digital','Menggantikan seluruh kegiatan belajar'],a:1,e:'Salah satu tujuan pembelajaran yang tercantum adalah menghubungkan pemikiran Darsana dengan kehidupan sehari-hari.'}
+];
+
+let state = {
+  student: JSON.parse(localStorage.getItem('darsana_student') || 'null'),
+  completedMaterial: JSON.parse(localStorage.getItem('darsana_material') || '[]'),
+  activity1: JSON.parse(localStorage.getItem('darsana_tf') || '[]'),
+  activity2: JSON.parse(localStorage.getItem('darsana_match') || '[]'),
+  quizAnswers: JSON.parse(localStorage.getItem('darsana_quiz_answers') || '[]'),
+  quizDone: localStorage.getItem('darsana_quiz_done') === 'true',
+  reflections: JSON.parse(localStorage.getItem('darsana_reflections') || '{}'),
+  reflectionDone: localStorage.getItem('darsana_reflection_done') === 'true',
+  sound: localStorage.getItem('darsana_sound') === 'true',
+  quizIndex:0, quizAnswered:false, tfIndex:0, tfAnswered:false,
+  matchLeft:null, matchRight:null
+};
+
+let audioCtx=null;
+function sound(type){
+  if(!state.sound) return;
+  try{
+    audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    const now=audioCtx.currentTime;
+    const freqs={click:420,good:660,bad:260,done:820,finish:520}[type]||420;
+    o.frequency.value=freqs;o.type='sine';
+    g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.08,now+.01);g.gain.exponentialRampToValueAtTime(.0001,now+.16);
+    o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+.18);
+  }catch(e){}
+}
+function toggleSound(){
+  state.sound=!state.sound;localStorage.setItem('darsana_sound',state.sound);
+  document.getElementById('soundToggle').textContent=state.sound?'🔊 SOUND ON':'🔇 SOUND OFF';
+  sound('click');toast(state.sound?'Sound dinyalakan.':'Sound dimatikan.');
+}
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open')}
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function save(){localStorage.setItem('darsana_student',JSON.stringify(state.student));localStorage.setItem('darsana_material',JSON.stringify(state.completedMaterial));localStorage.setItem('darsana_tf',JSON.stringify(state.activity1));localStorage.setItem('darsana_match',JSON.stringify(state.activity2));localStorage.setItem('darsana_quiz_answers',JSON.stringify(state.quizAnswers));localStorage.setItem('darsana_quiz_done',state.quizDone);localStorage.setItem('darsana_reflections',JSON.stringify(state.reflections));localStorage.setItem('darsana_reflection_done',state.reflectionDone)}
+function startLearning(){
+  const name=document.getElementById('studentName').value.trim(), cls=document.getElementById('studentClass').value.trim(), absent=document.getElementById('studentAbsent').value.trim();
+  const err=document.getElementById('identityError');
+  if(!name||!cls||!absent){err.textContent='Silakan lengkapi identitas terlebih dahulu.';return}
+  state.student={name,cls,absent};save();
+  document.getElementById('identityScreen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  sound('done');showPage('home');
+}
+function progress(){
+  const total=material.length+1+1+1; // material set + matching + quiz + reflection
+  let done=state.completedMaterial.length;
+  if(state.activity1.length===trueFalse.length)done++;
+  if(state.activity2.length===pairs.length)done++;
+  if(state.quizDone)done++;
+  if(state.reflectionDone)done++;
+  const pct=Math.round(done/(material.length+4)*100);
+  return Math.min(100,pct);
+}
+function profile(){
+  return `<div class="profile-line"><span class="chip">👤 ${esc(state.student.name)}</span><span class="chip">Kelas ${esc(state.student.cls)}</span><span class="chip">Absen ${esc(state.student.absent)}</span></div>`;
+}
+function showPage(page){
+  ['home','material','activity','quiz','result','reflection'].forEach(p=>document.getElementById(p+'Page').classList.toggle('hidden',p!==page));
+  document.querySelectorAll('.nav-links button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  document.getElementById('navLinks').classList.remove('open');
+  if(page==='home')renderHome();
+  if(page==='material')renderMaterial();
+  if(page==='activity')renderActivity();
+  if(page==='quiz')renderQuiz();
+  if(page==='result')renderResult();
+  if(page==='reflection')renderReflection();
+  window.scrollTo({top:0,behavior:'smooth'});sound('click');
+}
+function progressBar(){
+  return `<div class="progress-box"><div class="progress-head"><span>PROGRESS BELAJAR</span><span>${progress()}%</span></div><div class="progress-track"><div class="progress-fill" style="width:${progress()}%"></div></div></div>`;
+}
+function renderHome(){
+ document.getElementById('homePage').innerHTML=`
+ <section class="hero">
+  <div class="hero-grid"><div>
+   <div class="eyebrow">Ruang Belajar Digital</div>
+   <h2>Selamat Datang, ${esc(state.student.name)}!</h2>
+   <p class="muted">Siap menjelajahi dunia Darsana? Pelajari konsepnya, coba aktivitasnya, uji pemahamanmu, lalu refleksikan maknanya dalam kehidupan.</p>
+   ${profile()}${progressBar()}
+  </div><div class="hero-visual"><div class="hero-lotus">🪷</div></div></div>
+ </section>
+ <div class="section-title"><h2>Jelajahi Pembelajaran</h2><span class="muted">Belajar bertahap, bukan sekadar membaca.</span></div>
+ <div class="menu-grid">
+ ${menuCard('📖','MATERI','Pelajari Darsana secara bertahap.','material')}
+ ${menuCard('🎯','AKTIVITAS','Uji pemahaman melalui permainan.','activity')}
+ ${menuCard('🏆','KUIS','Tantang dirimu dengan 20 soal.','quiz')}
+ ${menuCard('✍️','REFLEKSI','Tuliskan pemahamanmu setelah belajar.','reflection')}
+ </div>
+ <div class="callout"><strong>Pesan pembelajaran:</strong> “Belajar Darsana bukan hanya memahami pemikiran para filsuf Hindu, tetapi belajar melihat kehidupan dengan lebih sadar, berpikir kritis, dan bertindak bijaksana.”</div>
+ <div class="footer">Materi pembelajaran disusun berdasarkan PDF Darsana yang diberikan.<br>Om Santih, Santih, Santih, Om.</div>`;
+}
+function menuCard(icon,title,desc,page){return `<div class="menu-card" onclick="showPage('${page}')" style="cursor:pointer"><div class="menu-icon">${icon}</div><h3>${title}</h3><p class="muted">${desc}</p><button class="btn btn-outline">Buka →</button></div>`}
+function renderMaterial(){
+ const items=material.map((m,i)=>`<div class="acc ${i===0?'open':''}" id="acc-${m.id}">
+  <button class="acc-head" onclick="toggleAcc('${m.id}')"><span>${m.title}</span><span>⌄</span></button>
+  <div class="acc-body"><p><strong>Ringkasan:</strong> ${m.summary}</p><p>${m.body}</p>
+  <div class="points">${m.points.map(p=>`<div class="point">• ${p}</div>`).join('')}</div>
+  <div class="complete-row">${state.completedMaterial.includes(m.id)?'<button class="btn done">SELESAI ✓</button>':`<button class="btn btn-primary" onclick="completeMaterial('${m.id}')">SAYA SUDAH MEMAHAMI ✓</button>`}</div>
+ </div></div>`).join('');
+ document.getElementById('materialPage').innerHTML=`
+ <div class="page-head"><div><div class="eyebrow">MATERI</div><h1>Menjelajahi Darsana</h1><p class="muted">Baca setiap bagian dan tandai setelah kamu memahaminya.</p></div><a class="backtop" href="javascript:void(0)" onclick="showPage('home')">← Beranda</a></div>
+ <div class="accordion">${items}</div>
+ <div class="section-title"><h2>Peta Konsep Darsana</h2><span class="muted">Klik node untuk melihat penjelasan.</span></div>
+ <div class="quiz-box">
+  <div style="text-align:center;font-weight:900;font-size:1.2rem;color:var(--maroon);margin-bottom:18px">DARSANA → SISTEM FILSAFAT HINDU → SAD DARSANA</div>
+  <div class="node-grid">${Object.keys(nodes).map(k=>`<button class="node" onclick="showNode('${k}')"><strong>${nodes[k].title}</strong><small>Klik untuk menjelajah</small></button>`).join('')}</div>
+  <div id="conceptDetail" class="concept-detail">Pilih salah satu Darsana untuk melihat konsep utamanya.</div>
+ </div>
+ <div class="section-title"><h2>Darsana dalam Kehidupan</h2></div>
+ <div class="case-grid">
+  <div class="case-card"><h3>📱 Informasi Digital</h3><p>Memeriksa sumber, bukti, dan alasan sebelum mempercayai informasi dapat dikaitkan dengan cara berpikir kritis dalam Nyaya.</p></div>
+  <div class="case-card"><h3>🧘 Pengendalian Diri</h3><p>Mengatur pikiran, mengendalikan emosi, menjaga konsentrasi, dan disiplin merupakan contoh penerapan yang dikaitkan dengan Yoga.</p></div>
+  <div class="case-card"><h3>📚 Pengambilan Keputusan</h3><p>LKPD mengajak siswa mempertimbangkan nilai Darsana ketika memilih antara ajakan teman dan menyelesaikan tugas sekolah.</p></div>
+ </div>`;
+}
+function toggleAcc(id){document.getElementById('acc-'+id).classList.toggle('open');sound('click')}
+function completeMaterial(id){
+ if(!state.completedMaterial.includes(id)){state.completedMaterial.push(id);save();sound('done');toast('Bagus! Materi ini sudah kamu selesaikan.');renderMaterial();renderHome();}
+}
+function showNode(k){document.getElementById('conceptDetail').innerHTML=`<strong style="color:var(--maroon);font-size:1.2rem">${nodes[k].title}</strong><p style="margin-bottom:0">${nodes[k].text}</p>`;sound('click')}
+function renderActivity(){
+ document.getElementById('activityPage').innerHTML=`
+ <div class="page-head"><div><div class="eyebrow">AKTIVITAS</div><h1>Belajar sambil mencoba</h1><p class="muted">Gunakan aktivitas untuk menguji pemahaman sebelum menghadapi kuis.</p></div></div>
+ <div class="activity-tabs"><button id="tabTF" class="tab-btn active" onclick="activityTab('tf')">01 Benar / Salah</button><button id="tabMatch" class="tab-btn" onclick="activityTab('match')">02 Matching</button></div>
+ <div id="activityContent"></div>`;
+ activityTab(window.activityMode||'tf');
+}
+function activityTab(mode){window.activityMode=mode;document.getElementById('tabTF')?.classList.toggle('active',mode==='tf');document.getElementById('tabMatch')?.classList.toggle('active',mode==='match');mode==='tf'?renderTF():renderMatch()}
+function renderTF(){
+ let i=state.tfIndex;
+ if(i>=trueFalse.length)i=0;
+ const item=trueFalse[i], answered=state.activity1.includes(i);
+ document.getElementById('activityContent').innerHTML=`
+ <div class="quiz-box"><div class="eyebrow">AKTIVITAS 01 • ${i+1}/${trueFalse.length}</div>
+ <div class="statement">${item.q}</div>
+ <div class="choice-row"><button class="choice ${answered?'selected':''}" onclick="answerTF(true)">BENAR</button><button class="choice" onclick="answerTF(false)">SALAH</button></div>
+ <div id="tfFeedback" class="feedback"></div>
+ <div style="display:flex;justify-content:space-between;margin-top:15px"><span class="muted">Selesai: ${state.activity1.length}/${trueFalse.length}</span><button class="btn btn-soft" onclick="nextTF()">Lanjut →</button></div></div>`;
+ if(answered)showTFStored();
+}
+function answerTF(ans){
+ const i=state.tfIndex,item=trueFalse[i], correct=ans===item.a;
+ const f=document.getElementById('tfFeedback');
+ f.className='feedback show '+(correct?'good':'bad');
+ f.innerHTML=correct?`<strong>✓ JAWABAN BENAR</strong><br>${item.e}`:`<strong>✗ JAWABAN KURANG TEPAT</strong><br>Jawaban yang benar adalah <strong>${item.a?'BENAR':'SALAH'}</strong>.<br>${item.e}`;
+ if(!state.activity1.includes(i))state.activity1.push(i);
+ save();sound(correct?'good':'bad');
+}
+function showTFStored(){const i=state.tfIndex,item=trueFalse[i];const f=document.getElementById('tfFeedback');f.className='feedback show good';f.innerHTML=`<strong>✓ SUDAH DIJAWAB</strong><br>${item.e}`}
+function nextTF(){if(state.tfIndex<trueFalse.length-1)state.tfIndex++;else{state.tfIndex=0;toast('Aktivitas Benar/Salah selesai!');sound('done')}save();renderTF();renderHome()}
+function renderMatch(){
+ const matched=state.activity2;
+ document.getElementById('activityContent').innerHTML=`
+ <div class="quiz-box"><div class="eyebrow">AKTIVITAS 02 • MATCHING</div><h2>Cocokkan istilah dengan konsepnya</h2><p class="muted">Klik satu istilah, lalu klik pasangannya.</p>
+ <div class="match-grid"><div><h3>ISTILAH</h3><div class="match-list">${pairs.map((p,i)=>`<button id="left-${i}" class="match-item ${matched.includes(i)?'matched':''}" ${matched.includes(i)?'disabled':''} onclick="selectMatch('left',${i})">${p[0]}</button>`).join('')}</div></div>
+ <div><h3>PENGERTIAN / KONSEP</h3><div class="match-list">${shuffleIndices().map(i=>`<button id="right-${i}" class="match-item ${matched.includes(i)?'matched':''}" ${matched.includes(i)?'disabled':''} onclick="selectMatch('right',${i})">${pairs[i][1]}</button>`).join('')}</div></div></div>
+ <div class="match-status">${matched.length}/${pairs.length} pasangan benar</div>
+ ${matched.length===pairs.length?'<div class="feedback show good"><strong>🎉 AKTIVITAS SELESAI!</strong><br>Semua pasangan berhasil dicocokkan.</div>':''}
+ </div>`;
+}
+let shuffledMatch=[5,1,3,0,4,2];
+function shuffleIndices(){return shuffledMatch}
+function selectMatch(side,i){
+ if(state.activity2.includes(i))return;
+ state[side==='left'?'matchLeft':'matchRight']=i;
+ document.querySelectorAll('.match-item').forEach(x=>x.classList.remove('selected'));
+ document.getElementById(`${side}-${i}`).classList.add('selected');
+ if(state.matchLeft!==null&&state.matchRight!==null){
+   const l=state.matchLeft,r=state.matchRight;
+   if(l===r){state.activity2.push(l);save();sound('good');toast('✓ Pasangan benar!');}
+   else{sound('bad');toast('Belum tepat, coba periksa kembali.');document.getElementById(`left-${l}`)?.classList.add('wrong');document.getElementById(`right-${r}`)?.classList.add('wrong');}
+   state.matchLeft=null;state.matchRight=null;setTimeout(renderMatch,300);
+   if(state.activity2.length===pairs.length){sound('finish');renderHome()}
+ }
+}
+function startQuiz(){
+ state.quizIndex=0;state.quizAnswered=false;state.quizAnswers=[];state.quizDone=false;save();showPage('quiz');
+}
+function renderQuiz(){
+ if(state.quizDone){renderResult();showPage('result');return}
+ const i=state.quizIndex,item=quiz[i], selected=state.quizAnswers[i];
+ document.getElementById('quizPage').innerHTML=`
+ <div class="page-head"><div><div class="eyebrow">FINAL QUEST • SOAL ${i+1}/20</div><h1>Uji Pemahaman Darsana</h1><p class="muted">Pilih jawaban, baca pembahasannya, lalu lanjutkan.</p></div><div class="chip">${i+1} / ${quiz.length}</div></div>
+ <div class="quiz-box"><div class="progress-track"><div class="progress-fill" style="width:${((i)/quiz.length)*100}%"></div></div>
+ <h2 style="margin-top:22px">${item.q}</h2>
+ <div class="quiz-options">${item.o.map((o,j)=>`<button class="quiz-option ${selected!==undefined?(j===selected?(selected===item.a?'correct':'incorrect'):'') :''}" ${selected!==undefined?'disabled':''} onclick="answerQuiz(${j})"><strong>${String.fromCharCode(65+j)}.</strong> ${o}</button>`).join('')}</div>
+ <div id="quizFeedback"></div>
+ <div class="quiz-nav">${selected!==undefined?`<button class="btn btn-primary" onclick="nextQuiz()">${i===quiz.length-1?'LIHAT HASIL':'SOAL BERIKUTNYA →'}</button>`:''}</div>
+ </div>`;
+ if(selected!==undefined){
+   const f=document.getElementById('quizFeedback'),correct=selected===item.a;
+   f.className='feedback show '+(correct?'good':'bad');
+   f.innerHTML=correct?`<strong>✓ BENAR!</strong><br>Jawabanmu tepat.<br><br><strong>Pembahasan:</strong> ${item.e}`:`<strong>✗ KURANG TEPAT</strong><br>Jawaban yang benar adalah <strong>${String.fromCharCode(65+item.a)}. ${item.o[item.a]}</strong>.<br><br><strong>Pembahasan:</strong> ${item.e}`;
+ }
+}
+function answerQuiz(j){
+ if(state.quizAnswers[state.quizIndex]!==undefined)return;
+ state.quizAnswers[state.quizIndex]=j;save();sound(j===quiz[state.quizIndex].a?'good':'bad');renderQuiz();
+}
+function nextQuiz(){
+ if(state.quizIndex<quiz.length-1){state.quizIndex++;renderQuiz();}else{state.quizDone=true;save();sound('finish');showPage('result')}
+}
+function getScore(){
+ const correct=state.quizAnswers.reduce((n,a,i)=>n+(a===quiz[i].a?1:0),0);return {correct,wrong:quiz.length-correct,pct:Math.round(correct/quiz.length*100)}
+}
+function renderResult(){
+ const s=getScore();
+ const wrongs=quiz.map((q,i)=>({q,i})).filter(x=>state.quizAnswers[x.i]!==x.q.a);
+ document.getElementById('resultPage').innerHTML=`
+ <div class="page-head"><div><div class="eyebrow">HASIL BELAJAR</div><h1>Hasil Final Quest</h1><p class="muted">Berikut rekapan kuis yang sudah kamu kerjakan.</p></div></div>
+ <div class="score-card"><div class="score-ring" style="--score:${s.pct}%"><div class="score-number">${s.pct}</div></div>
+ <h2>${s.pct>=80?'🎉 Kuis selesai!':'Kuis selesai!'}</h2><p>${esc(state.student.name)} • ${esc(state.student.cls)} • Absen ${esc(state.student.absent)}</p>
+ <div class="stats"><div class="stat"><strong>${s.pct}/100</strong>Skor</div><div class="stat"><strong>${s.correct}</strong>Benar</div><div class="stat"><strong>${s.wrong}</strong>Salah</div><div class="stat"><strong>${quiz.length}</strong>Total soal</div></div>
+ <div class="choice-row" style="justify-content:center"><button class="btn btn-primary" onclick="startQuiz()">↻ ULANGI KUIS</button><button class="btn btn-soft" onclick="showPage('reflection')">LANJUT REFLEKSI →</button></div></div>
+ <div class="section-title"><h2>Materi yang Perlu Dipelajari Kembali</h2><span class="muted">${wrongs.length} soal perlu ditinjau</span></div>
+ <div class="review-list">${wrongs.length?wrongs.map(x=>{const q=x.q,topic=topicForQuestion(x.i);return `<div class="review"><h3>Soal ${x.i+1} — ${topic}</h3><p><strong>${q.q}</strong></p><p>Jawaban benar: <strong>${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</strong></p><p class="muted">${q.e}</p><button class="btn btn-outline" onclick="learnAgain('${topic.id}')">PELAJARI KEMBALI</button></div>`}).join(''):'<div class="callout">Semua jawaban benar. Tetap baca kembali materi untuk memperkuat pemahaman.</div>'}</div>`;
+}
+function topicForQuestion(i){
+ const map=[['darsana','Darsana'],['sad','Sad Darsana'],['sad','Sad Darsana'],['nyaya','Nyaya'],['samkhya','Samkhya'],['samkhya','Samkhya'],['yoga','Yoga'],['yoga','Yoga'],['mimamsa','Mimamsa'],['vedanta','Vedanta'],['nyaya','Nyaya'],['vaiseshika','Vaiseshika'],['samkhya','Samkhya'],['yoga','Yoga'],['mimamsa','Mimamsa'],['vedanta','Vedanta'],['nyaya','Nyaya'],['yoga','Yoga'],['sad','Sad Darsana'],['darsana','Darsana']];return {id:map[i][0],name:map[i][1]}}
+function learnAgain(id){showPage('material');setTimeout(()=>{document.getElementById('acc-'+id)?.scrollIntoView({behavior:'smooth',block:'center'});document.getElementById('acc-'+id)?.classList.add('open')},150)}
+function renderReflection(){
+ const r=state.reflections;
+ document.getElementById('reflectionPage').innerHTML=`
+ <div class="page-head"><div><div class="eyebrow">REFLEKSI PEMBELAJARAN</div><h1>Berhenti sejenak, lalu maknai.</h1><p class="muted">Jawab dengan jujur berdasarkan pengalaman belajarmu.</p></div></div>
+ <div class="reflection-grid">
+ ${reflectionBox('r1','1. Apa hal baru yang kamu pahami setelah mempelajari Darsana?',r.r1)}
+ ${reflectionBox('r2','2. Apa bagian materi yang paling menarik?',r.r2)}
+ ${reflectionBox('r3','3. Apa manfaat mempelajari Darsana menurut pemahamanmu?',r.r3)}
+ </div>
+ <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" onclick="saveReflection()">SIMPAN REFLEKSI ✓</button><button class="btn btn-soft" onclick="showPage('home')">KEMBALI KE BERANDA</button></div>
+ <div id="reflectionSaved" class="saved ${state.reflectionDone?'show':''}">✓ Refleksi berhasil disimpan.</div>
+ <div class="callout" style="margin-top:24px"><strong>Ingat:</strong> berpikir dengan jernih, belajar dengan sadar, berkarya dengan kreatif, dan bertindak dengan bijaksana.</div>`;
+}
+function reflectionBox(id,label,val=''){return `<div class="textarea-wrap"><label style="font-weight:850;display:block;margin-bottom:8px">${label}</label><textarea id="${id}" placeholder="Tulis jawabanmu di sini...">${esc(val)}</textarea></div>`}
+function saveReflection(){
+ state.reflections={r1:document.getElementById('r1').value.trim(),r2:document.getElementById('r2').value.trim(),r3:document.getElementById('r3').value.trim()};
+ if(Object.values(state.reflections).some(v=>!v)){toast('Lengkapi semua pertanyaan refleksi terlebih dahulu.');return}
+ state.reflectionDone=true;save();sound('done');renderReflection();renderHome();toast('✓ Refleksi berhasil disimpan.');
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function init(){
+ if(state.student){
+   document.getElementById('identityScreen').classList.add('hidden');document.getElementById('app').classList.remove('hidden');
+   document.getElementById('soundToggle').textContent=state.sound?'🔊 SOUND ON':'🔇 SOUND OFF';showPage('home');
+ }else{
+   document.getElementById('soundToggle').textContent=state.sound?'🔊 SOUND ON':'🔇 SOUND OFF';
+ }
+}
+init();
+</script>
+</body>
+</html>
